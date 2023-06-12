@@ -37,6 +37,7 @@ const github_1 = require("@actions/github");
 const Octokit_1 = __importDefault(require("./integrations/Octokit"));
 const dateUtils_1 = require("./utils/dateUtils");
 const constants_1 = require("./constants");
+const emailUtils_1 = require("./utils/emailUtils");
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const githubToken = core.getInput('GH_TOKEN');
@@ -56,6 +57,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             if (daysUtilDueDate <= 0) {
                 yield ok.removeLabelFromIssue(github_1.context.repo.owner, github_1.context.repo.repo, constants_1.NEXT_WEEK_TAG_NAME, issue.number);
                 yield ok.addLabelToIssue(github_1.context.repo.owner, github_1.context.repo.repo, issue.number, [constants_1.OVERDUE_TAG_NAME]);
+                yield emailUtils_1.sendDueMail();
             }
         }
         return {
