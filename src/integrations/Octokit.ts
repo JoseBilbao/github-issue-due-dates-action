@@ -1,6 +1,6 @@
-import { getOctokit } from '@actions/github';
-import fm from 'front-matter';
-import { OVERDUE_TAG_NAME } from '../constants';
+import { getOctokit } from "@actions/github";
+import fm from "front-matter";
+// import { OVERDUE_TAG_NAME } from "../constants";
 
 export default class Octokit {
   public client;
@@ -10,16 +10,16 @@ export default class Octokit {
   }
 
   async listAllOpenIssues(owner: string, repo: string) {
-    const {data} = await this.client.issues.listForRepo({
+    const { data } = await this.client.rest.issues.listForRepo({
       owner,
       repo,
-      state: 'open',
+      state: "open",
     });
     return data;
   }
 
   async get(owner: string, repo: string, issueNumber: number) {
-    const {data} = await this.client.issues.get({
+    const { data } = await this.client.rest.issues.get({
       owner,
       repo,
       issue_number: issueNumber,
@@ -28,7 +28,7 @@ export default class Octokit {
   }
 
   async addLabelToIssue(owner: string, repo: string, issueNumber: number, labels: string[]) {
-    const {data} = await this.client.issues.addLabels({
+    const { data } = await this.client.rest.issues.addLabels({
       owner,
       repo,
       issue_number: issueNumber,
@@ -39,7 +39,7 @@ export default class Octokit {
 
   async removeLabelFromIssue(owner: string, repo: string, name: string, issue_number: number) {
     try {
-      const {data} = await this.client.issues.removeLabel({
+      const { data } = await this.client.rest.issues.removeLabel({
         owner,
         repo,
         name,
@@ -53,29 +53,30 @@ export default class Octokit {
   }
 
   async getIssuesWithDueDate(rawIssues: any[]) {
-    return rawIssues.filter(issue => {
+    return rawIssues.filter((issue) => {
       // TODO: Move into utils
       const meta: any = fm(issue.body);
 
       const due = meta.attributes && (meta.attributes.due || meta.attributes.Due);
       if (meta.attributes && due) {
-        return Object.assign(issue, {due});
+        return Object.assign(issue, { due });
       }
     });
   }
 
   async getOverdueIssues(rawIssues: any[]) {
-    return rawIssues.filter(issue => {
-      const activeLabels = issue.labels.map(label => label.name);
-      return activeLabels.includes(OVERDUE_TAG_NAME);
+    return rawIssues.filter((issue) => {
+      const activeLabels = issue.labels.map((label: any) => label.name);
+      // return activeLabels.includes(OVERDUE_TAG_NAME);
+      return activeLabels.includes(process.env.OVERDUE_TAG_NAME);
     });
   }
 
   async createIssue(options: any) {
-    return await this.client.issues.create(options);
+    return await this.client.rest.issues.create(options);
   }
 
   async updateIssue(options: any) {
-    return await this.client.issues.update(options);
+    return await this.client.rest.issues.update(options);
   }
 }

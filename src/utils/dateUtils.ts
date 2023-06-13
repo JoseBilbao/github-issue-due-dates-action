@@ -1,7 +1,7 @@
-import moment from 'moment';
+import moment from "moment";
 
 export const datesToDue = (date: string) => {
   const eventDate = moment(date);
   const today = moment();
-  return eventDate.diff(today, 'days');
+  return eventDate.diff(today, "days");
 };

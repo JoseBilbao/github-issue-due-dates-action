@@ -1,13 +1,13 @@
-name: 'Due Dates'
-description: 'Manage due dates on issues'
-author: 'Alex Leventer'
+name: "Due Dates"
+description: "Manage due dates on issues"
+author: "Alex Leventer"
 inputs:
   GH_TOKEN:
     description: GitHub token used to make API requests
     required: true
 branding:
-  icon: 'calendar'
-  color: 'purple'
+  icon: "calendar"
+  color: "purple"
 runs:
-  using: 'node12'
-  main: 'dist/app.js'
+  using: "node18"
+  main: "dist/index.js"
