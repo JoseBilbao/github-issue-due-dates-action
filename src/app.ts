@@ -2,9 +2,9 @@ import * as core from "@actions/core";
 import { context } from "@actions/github";
 import Octokit from "./integrations/Octokit";
 import { datesToDue } from "./utils/dateUtils";
-import { sendDueMail } from "./utils/emailUtils_old";
 // import { OVERDUE_TAG_NAME, NEXT_WEEK_TAG_NAME } from "./constants";
 import dotenv from "dotenv";
+import {sendDueMailjet} from "./utils/emailUtils";
 
 dotenv.config();
 
@@ -40,7 +40,7 @@ export const run = async () => {
           process.env.OVERDUE_TAG_NAME,
         ]);
         // await sendDueMail();
-
+        await sendDueMailjet();
       }
     }
     return {
