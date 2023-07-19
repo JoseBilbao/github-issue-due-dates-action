@@ -1,4 +1,6 @@
 import {Client, SendEmailV3_1, LibraryResponse} from "node-mailjet";
+import dotenv from "dotenv";
+dotenv.config();
 
 // async..await is not allowed in global scope, must use a wrapper
 export async function sendDueMailjet(issue: any) {
