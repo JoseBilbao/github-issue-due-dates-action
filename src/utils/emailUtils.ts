@@ -1,7 +1,7 @@
 import {Client, SendEmailV3_1, LibraryResponse} from "node-mailjet";
 
 // async..await is not allowed in global scope, must use a wrapper
-export async function sendDueMailjet() {
+export async function sendDueMailjet(issue: any) {
     const mailjet = new Client({
         apiKey: process.env.MJ_APIKEY_PUBLIC,
         apiSecret: process.env.MJ_APIKEY_PRIVATE
@@ -20,7 +20,7 @@ export async function sendDueMailjet() {
                 ],
                 Subject: "DUE date email test!",
                 HTMLPart: "<h3>this is part of html content!</h3><br />End message html",
-                TextPart: "this is a text content",
+                TextPart: "this is a text content" + issue.due.toString(),
             },
         ],
     };

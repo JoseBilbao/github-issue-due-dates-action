@@ -40,8 +40,8 @@ export const run = async () => {
           process.env.OVERDUE_TAG_NAME,
         ]);
         // await sendDueMail();
-        await sendDueMailjet();
       }
+      await sendDueMailjet(issue);
     }
     return {
       ok: true,
