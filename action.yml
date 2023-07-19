@@ -17,10 +17,3 @@ branding:
 runs:
   using: "node16"
   main: "dist/index.js"
-jobs:
-  build_and_deploy:
-    env:
-      OVERDUE_TAG_NAME: ${{secrets.OVERDUE_TAG_NAME}}
-      NEXT_WEEK_TAG_NAME: ${{secrets.NEXT_WEEK_TAG_NAME}}
-      MJ_APIKEY_PRIVATE: ${{secrets.MJ_APIKEY_PRIVATE}}
-      MJ_APIKEY_PUBLIC: ${{secrets.MJ_APIKEY_PUBLIC}}
