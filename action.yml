@@ -5,6 +5,12 @@ inputs:
   GH_TOKEN:
     description: GitHub token used to make API requests
     required: true
+  MJ_APIKEY_PRIVATE:
+    description: MJ
+    required: true
+  MJ_APIKEY_PUBLIC:
+    description: MJ
+    required: true
 branding:
   icon: "calendar"
   color: "purple"
