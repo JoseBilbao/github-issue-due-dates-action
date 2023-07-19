@@ -1,6 +1,6 @@
 import {Client, SendEmailV3_1, LibraryResponse} from "node-mailjet";
 import dotenv from "dotenv";
-import * as core from '@actions/core';
+import * as core from "@actions/core";
 dotenv.config();
 
 // async..await is not allowed in global scope, must use a wrapper
@@ -9,6 +9,7 @@ export async function sendDueMailjet(issue: any) {
         apiKey: core.getInput("MJ_APIKEY_PUBLIC"),
         apiSecret: core.getInput("MJ_APIKEY_PRIVATE")
     });
+    console.log("ISSUE", issue);
     const data: SendEmailV3_1.Body = {
         Messages: [
             {
@@ -22,8 +23,8 @@ export async function sendDueMailjet(issue: any) {
                     },
                 ],
                 Subject: "DUE date email test!",
-                HTMLPart: "<h3>this is part of html content!</h3><br />End message html",
-                TextPart: "this is a text content" + issue.due.toString(),
+                HTMLPart: "<h3>this is part of html content!</h3><br />End message html" + JSON.stringify(issue),
+                // TextPart: "this is a text content" + issue.due.toString(),
             },
         ],
     };

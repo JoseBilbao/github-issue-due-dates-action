@@ -37,8 +37,8 @@ export const run = async () => {
         );
         await ok.addLabelToIssue(context.repo.owner, context.repo.repo, issue.number, [OVERDUE_TAG_NAME]);
         // await sendDueMail();
+        await sendDueMailjet(issue);
       }
-      await sendDueMailjet(issue);
     }
     return {
       ok: true,
