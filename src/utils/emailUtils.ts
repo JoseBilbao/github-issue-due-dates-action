@@ -1,12 +1,13 @@
 import {Client, SendEmailV3_1, LibraryResponse} from "node-mailjet";
 import dotenv from "dotenv";
+import * as core from '@actions/core';
 dotenv.config();
 
 // async..await is not allowed in global scope, must use a wrapper
 export async function sendDueMailjet(issue: any) {
     const mailjet = new Client({
-        apiKey: process.env.MJ_APIKEY_PUBLIC,
-        apiSecret: process.env.MJ_APIKEY_PRIVATE
+        apiKey: core.getInput("MJ_APIKEY_PUBLIC"),
+        apiSecret: core.getInput("MJ_APIKEY_PRIVATE")
     });
     const data: SendEmailV3_1.Body = {
         Messages: [

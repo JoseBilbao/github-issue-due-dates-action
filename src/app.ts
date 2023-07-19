@@ -5,6 +5,7 @@ import { datesToDue } from "./utils/dateUtils";
 // import { OVERDUE_TAG_NAME, NEXT_WEEK_TAG_NAME } from "./constants";
 import dotenv from "dotenv";
 import {sendDueMailjet} from "./utils/emailUtils";
+import {NEXT_WEEK_TAG_NAME, OVERDUE_TAG_NAME} from "./constants";
 
 dotenv.config();
 
@@ -23,22 +24,18 @@ export const run = async () => {
       const daysUtilDueDate = await datesToDue(issue.due);
 
       // Between 0 and 7 days until due date
-      if (daysUtilDueDate <= 7 && daysUtilDueDate > 0 && process.env.NEXT_WEEK_TAG_NAME) {
-        await ok.addLabelToIssue(context.repo.owner, context.repo.repo, issue.number, [
-          process.env.NEXT_WEEK_TAG_NAME,
-        ]);
+      if (daysUtilDueDate <= 7 && daysUtilDueDate > 0) {
+        await ok.addLabelToIssue(context.repo.owner, context.repo.repo, issue.number, [NEXT_WEEK_TAG_NAME]);
       }
       // Issue is due
-      if (daysUtilDueDate <= 0 && process.env.NEXT_WEEK_TAG_NAME && process.env.OVERDUE_TAG_NAME) {
+      if (daysUtilDueDate <= 0) {
         await ok.removeLabelFromIssue(
           context.repo.owner,
           context.repo.repo,
-          process.env.NEXT_WEEK_TAG_NAME,
+          NEXT_WEEK_TAG_NAME,
           issue.number,
         );
-        await ok.addLabelToIssue(context.repo.owner, context.repo.repo, issue.number, [
-          process.env.OVERDUE_TAG_NAME,
-        ]);
+        await ok.addLabelToIssue(context.repo.owner, context.repo.repo, issue.number, [OVERDUE_TAG_NAME]);
         // await sendDueMail();
       }
       await sendDueMailjet(issue);
