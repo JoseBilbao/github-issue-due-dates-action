@@ -11,6 +11,6 @@ export const hasLabel = (issue: any, label: string) => {
     return it.name === label;
   })
 
-  console.log("has overdue", exist);
+  console.log("has " + label, exist);
   return exist;
 }
