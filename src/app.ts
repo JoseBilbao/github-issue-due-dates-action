@@ -1,7 +1,7 @@
 import * as core from "@actions/core";
 import { context } from "@actions/github";
 import Octokit from "./integrations/Octokit";
-import { datesToDue } from "./utils/dateUtils";
+import {datesToDue, hasOverdue} from "./utils/dateUtils";
 // import { OVERDUE_TAG_NAME, NEXT_WEEK_TAG_NAME } from "./constants";
 import dotenv from "dotenv";
 import {sendDueMailjet} from "./utils/emailUtils";
@@ -28,7 +28,7 @@ export const run = async () => {
         await ok.addLabelToIssue(context.repo.owner, context.repo.repo, issue.number, [NEXT_WEEK_TAG_NAME]);
       }
       // Issue is due
-      if (daysUtilDueDate <= 0) {
+      if (daysUtilDueDate <= 0 && !hasOverdue(issue)) {
         await ok.removeLabelFromIssue(
           context.repo.owner,
           context.repo.repo,

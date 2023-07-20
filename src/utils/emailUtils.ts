@@ -10,6 +10,18 @@ export async function sendDueMailjet(issue: any) {
         apiSecret: core.getInput("MJ_APIKEY_PRIVATE")
     });
     console.log("ISSUE", issue);
+    const contentHTML = `
+        <h4>Tittle: ${issue.title}</h4>
+        <p>The due date of the task has passed ${issue.title}</p>
+        <p>The task was scheduled for the date ${issue.due}</p>    
+        <p>Those in charge of this task are:</p>
+        <ul>
+        ${
+            issue.assignees.map((it: any) => `<li>${it.login}</li>`)
+        }
+        </ul>
+        <br>
+    `
     const data: SendEmailV3_1.Body = {
         Messages: [
             {
@@ -23,7 +35,7 @@ export async function sendDueMailjet(issue: any) {
                     },
                 ],
                 Subject: "DUE date email test!",
-                HTMLPart: "<h3>this is part of html content!</h3><br />End message html" + JSON.stringify(issue),
+                HTMLPart: contentHTML,
                 // TextPart: "this is a text content" + issue.due.toString(),
             },
         ],
