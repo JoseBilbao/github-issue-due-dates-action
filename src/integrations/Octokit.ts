@@ -55,9 +55,12 @@ export default class Octokit {
   async getIssuesWithDueDate(rawIssues: any[]) {
     return rawIssues.filter((issue) => {
       // TODO: Move into utils
+      console.log("ISS", issue)
       const meta: any = fm(issue.body);
 
       const due = meta.attributes && (meta.attributes.due || meta.attributes.Due);
+
+      console.log("MET", meta.attributes, due)
       if (meta.attributes && due) {
         return Object.assign(issue, { due });
       }
