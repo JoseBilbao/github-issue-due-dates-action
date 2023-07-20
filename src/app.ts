@@ -39,7 +39,7 @@ export const run = async () => {
         // await sendDueMail();
         await sendDueMailjet(issue, "dueDate");
       }
-      console.log("ISSUE: ", issue)
+      // console.log("ISSUE: ", issue)
       if (issue.closed_at && !hasLabel(issue, CLOSED_TAG_NAME)) {
         // add closed label
         await ok.addLabelToIssue(context.repo.owner, context.repo.repo, issue.number, [CLOSED_TAG_NAME]);
