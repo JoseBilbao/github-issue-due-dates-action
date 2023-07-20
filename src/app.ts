@@ -18,8 +18,10 @@ export const run = async () => {
 
     const ok = new Octokit(githubToken);
 
-    const issues = await ok.listAllOpenIssues(context.repo.owner, context.repo.repo);
-    console.log("RESULT ISSUES", issues);
+    const issues = await ok.listAllOpenIssues(context.repo.owner, context.repo.repo, "open");
+    const issuesClosed = await ok.listAllOpenIssues(context.repo.owner, context.repo.repo, "closed");
+    issues.concat(issuesClosed);
+    // console.log("RESULT ISSUES", issues);
     const results = await ok.getIssuesWithDueDate(issues);
     for (const issue of results) {
       const daysUtilDueDate = await datesToDue(issue.due);

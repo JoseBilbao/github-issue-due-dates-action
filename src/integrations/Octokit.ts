@@ -9,11 +9,11 @@ export default class Octokit {
     this.client = getOctokit(token);
   }
 
-  async listAllOpenIssues(owner: string, repo: string) {
+  async listAllOpenIssues(owner: string, repo: string, state: any) {
     const { data } = await this.client.rest.issues.listForRepo({
       owner,
       repo,
-      state: "closed",
+      state,
     });
     return data;
   }
