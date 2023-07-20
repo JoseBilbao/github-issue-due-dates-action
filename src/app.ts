@@ -1,11 +1,11 @@
 import * as core from "@actions/core";
 import { context } from "@actions/github";
 import Octokit from "./integrations/Octokit";
-import {datesToDue, hasOverdue} from "./utils/dateUtils";
+import {datesToDue, hasLabel} from "./utils/dateUtils";
 // import { OVERDUE_TAG_NAME, NEXT_WEEK_TAG_NAME } from "./constants";
 import dotenv from "dotenv";
 import {sendDueMailjet} from "./utils/emailUtils";
-import {NEXT_WEEK_TAG_NAME, OVERDUE_TAG_NAME} from "./constants";
+import {NEXT_WEEK_TAG_NAME, OVERDUE_TAG_NAME, CLOSED_TAG_NAME} from "./constants";
 
 dotenv.config();
 
@@ -28,7 +28,7 @@ export const run = async () => {
         await ok.addLabelToIssue(context.repo.owner, context.repo.repo, issue.number, [NEXT_WEEK_TAG_NAME]);
       }
       // Issue is due
-      if (daysUtilDueDate <= 0 && !hasOverdue(issue)) {
+      if (daysUtilDueDate <= 0 && !hasLabel(issue, OVERDUE_TAG_NAME) && issue.closed_at === null) {
         await ok.removeLabelFromIssue(
           context.repo.owner,
           context.repo.repo,
@@ -37,7 +37,15 @@ export const run = async () => {
         );
         await ok.addLabelToIssue(context.repo.owner, context.repo.repo, issue.number, [OVERDUE_TAG_NAME]);
         // await sendDueMail();
-        await sendDueMailjet(issue);
+        await sendDueMailjet(issue, "dueDate");
+      }
+
+      if (issue.closed_at && !hasLabel(issue, CLOSED_TAG_NAME)) {
+        // add closed label
+        await ok.addLabelToIssue(context.repo.owner, context.repo.repo, issue.number, [CLOSED_TAG_NAME]);
+
+        // send closed email
+        await sendDueMailjet(issue, "closed");
       }
     }
     return {
