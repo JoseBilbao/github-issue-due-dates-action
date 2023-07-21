@@ -47,7 +47,7 @@ export async function sendDueMailjet(issue: any, type: string, daysUtilDueDate: 
         apiKey: core.getInput("MJ_APIKEY_PUBLIC"),
         apiSecret: core.getInput("MJ_APIKEY_PRIVATE")
     });
-    // console.log("ISSUE", issue);
+    console.log("ISSUE", issue);
 
     const types = typeEmails(issue, daysUtilDueDate);
 

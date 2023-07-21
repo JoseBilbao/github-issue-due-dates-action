@@ -21,7 +21,7 @@ export const run = async () => {
     const issues = await ok.listAllOpenIssues(context.repo.owner, context.repo.repo, "open");
     // const issuesClosed = await ok.listAllOpenIssues(context.repo.owner, context.repo.repo, "closed");
     // issues.concat(issuesClosed);
-    console.log("RESULT ISSUES", issues);
+    // console.log("RESULT ISSUES", issues);
     const results = await ok.getIssuesWithDueDate(issues);
     for (const issue of results) {
       const daysUtilDueDate = await datesToDue(issue.due);
@@ -47,8 +47,10 @@ export const run = async () => {
         // add closed label
         await ok.addLabelToIssue(context.repo.owner, context.repo.repo, issue.number, [CLOSED_TAG_NAME]);
 
+        const iss: any = ok.get(context.repo.owner, context.repo.repo, issue.number);
+        const newIssue = {...issue, closed_by: iss.closed_by};
         // send closed email
-        await sendDueMailjet(issue, "closed", daysUtilDueDate);
+        await sendDueMailjet(newIssue, "closed", daysUtilDueDate);
       }
     }
     return {
