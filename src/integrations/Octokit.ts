@@ -13,7 +13,7 @@ export default class Octokit {
     const { data } = await this.client.rest.issues.listForRepo({
       owner,
       repo,
-      state,
+      state: "all",
     });
     return data;
   }
