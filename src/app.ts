@@ -40,7 +40,7 @@ export const run = async () => {
         );
         await ok.addLabelToIssue(context.repo.owner, context.repo.repo, issue.number, [OVERDUE_TAG_NAME]);
         // await sendDueMail();
-        await sendDueMailjet(issue, "dueDate");
+        await sendDueMailjet(issue, "dueDate", daysUtilDueDate);
       }
       // console.log("ISSUE: ", issue)
       if (issue.closed_at && !hasLabel(issue, CLOSED_TAG_NAME)) {
@@ -48,7 +48,7 @@ export const run = async () => {
         await ok.addLabelToIssue(context.repo.owner, context.repo.repo, issue.number, [CLOSED_TAG_NAME]);
 
         // send closed email
-        await sendDueMailjet(issue, "closed");
+        await sendDueMailjet(issue, "closed", daysUtilDueDate);
       }
     }
     return {

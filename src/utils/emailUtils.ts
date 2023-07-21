@@ -4,7 +4,7 @@ import * as core from "@actions/core";
 import moment from "moment";
 dotenv.config();
 
-const typeEmails = (issue: any) => {
+const typeEmails = (issue: any, daysUtilDueDate: number) => {
     return [
         {
             name: "dueDate",
@@ -21,11 +21,16 @@ const typeEmails = (issue: any) => {
         },
         {
             name: "closed",
-            subject: `Task ${issue.title.toUpperCase()} has been completed successfully`,
+            subject:  daysUtilDueDate >= 0 ?
+                `Task "${issue.title.toUpperCase()}" completed successfully ${ daysUtilDueDate} days before.` :
+                `Task "${issue.title.toUpperCase()}" completed successfully with ${ daysUtilDueDate * (-1)} days delay.`,
             content: `
         <h3>Title: ${issue.title}</h3>
         <p><b>${issue.title}</b> its DONE!! </p>
-        <p style="color: darkslategrey"><em>This task was completed in ${moment(issue.closed_at).format("LLL")}</em></p>    
+        <p><em>This task was completed in ${moment(issue.closed_at).format("LLL")}</em></p>
+        <p style="color:${daysUtilDueDate >= 0 ? "darkgreen" : "darkred"}">${daysUtilDueDate >= 0 ? 
+                `The task was completed ${daysUtilDueDate} days before` : 
+                `The task was completed with ${daysUtilDueDate * (-1)} days delay`}</p>    
         <p>In charge of:</p>
         <ul>
         ${issue.assignees.map((it: any) => `<li>${it.login}</li>`)}
@@ -37,15 +42,14 @@ const typeEmails = (issue: any) => {
 }
 
 // async..await is not allowed in global scope, must use a wrapper
-export async function sendDueMailjet(issue: any, type: string) {
+export async function sendDueMailjet(issue: any, type: string, daysUtilDueDate: number) {
     const mailjet = new Client({
         apiKey: core.getInput("MJ_APIKEY_PUBLIC"),
         apiSecret: core.getInput("MJ_APIKEY_PRIVATE")
     });
     console.log("ISSUE", issue);
 
-    const contentHTML = ""
-    const types = typeEmails(issue);
+    const types = typeEmails(issue, daysUtilDueDate);
 
     // looking the correct type email
     const res = types.find((it: any) => {
