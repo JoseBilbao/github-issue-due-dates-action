@@ -48,6 +48,7 @@ export const run = async () => {
         await ok.addLabelToIssue(context.repo.owner, context.repo.repo, issue.number, [CLOSED_TAG_NAME]);
 
         const iss: any = ok.get(context.repo.owner, context.repo.repo, issue.number);
+        console.log("CLOSE ", iss);
         const newIssue = {...issue, closed_by: iss.closed_by};
         // send closed email
         await sendDueMailjet(newIssue, "closed", daysUtilDueDate);
